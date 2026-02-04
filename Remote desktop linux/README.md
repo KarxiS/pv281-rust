@@ -24,6 +24,15 @@ Design a custom protocol and Linux driver to allow mouse and keyboard use betwee
 - Rust 1.70+
 - Root privileges
 
+## Build and run
+
+```bash
+setup.sh
+cargo install --path shared/drag_drop --features gtk --bin kmf-drag-drop-helper
+
+cargo tauri dev
+```
+
 ## NixOS Setup
 
 This project includes Nix flake configuration for easy setup on NixOS:
@@ -86,31 +95,6 @@ also because of how VMware works, we need to set gaming policy in VMWare setting
 
 
 **Press CTRL-C or invalid number to cancel scanning.**
-## Build
-
-```bash
-cargo build --release
-```
-
-## Usage
-
-### Basic run:
-
-```bash
-cargo build --release && sudo ./target/release/kmf-driver --mouse /dev/input/by-id/<mouse-device> --keyboard /dev/input/by-id/<keyboard-device>
-```
-
-### Example run:
-
-```bash
-cargo build --release -p kmf-master && sudo ./target/release/kmf-master --mouse /dev/input/event4 --keyboard /dev/input/event1
-```
-### Alternative without parameters:
-
-```bash
-cargo build --release &&
-sudo ./target/release/kmf-cli
-```
 
 This will start the program without capturing any devices (useful for testing network/cursor features).
 
@@ -197,10 +181,6 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/):
 * **refactor:** Code refactoring
 * **test**: Adding or updating tests
 * **ci:** CI/CD changes
-
-
-## Dependencies #TODO
-
 
 ## Troubleshooting
 
