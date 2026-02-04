@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# Read commit message
+MSG=$(cat "$1")
+
+# Validate conventional commits format (with optional scope)
+if ! echo "$MSG" | grep -Eq "^(feat|fix|chore|refactor|docs|test|ci|style|perf|build)(\(.+\))?: [A-Z].+"; then
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Expected: <type>[optional scope]: <Message starting with capital letter>"
+  echo ""
+  echo "Valid types: feat, fix, chore, refactor, docs, test, ci, style, perf, build"
+  echo ""
+  echo "Examples:"
+  echo "  ✅ feat: Add keyboard sharing protocol"
+  echo "  ✅ feat(driver): Add mouse input handling"
+  echo "  ✅ fix(network): Handle connection timeout"
+  echo "  ✅ chore(deps): Update dependencies"
+  echo "  ❌ added stuff"
+  echo "  ❌ fix: lowercase message"
+  exit 1
+fi

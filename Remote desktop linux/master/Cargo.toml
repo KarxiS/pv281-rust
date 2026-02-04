@@ -1,0 +1,16 @@
+[[bin]]
+name = "kmf-master"
+path = "src/main.rs"
+
+[package]
+name = "kmf-master"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+kmf-driver = { path = "../shared/driver" }
+kmf-protocol = { path = "../shared/protocol" }
+kmf-middleware = { path = "../shared/middleware" }
+clap = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }

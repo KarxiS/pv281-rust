@@ -1,0 +1,16 @@
+[package]
+name = "iteration-05-todo-app"
+version = "0.1.1"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-files = "0.6.9"
+actix-web = "4.12.1"
+# `askama` dependency is optional, use any templating crate you like
+askama = "0.14.0"
+serde = { version = "1.0.228", features = ["derive"] }
+sqlx = { version = "0.8.6", features = ["runtime-tokio-rustls", "sqlite"] }
+anyhow = "1.0.100"
+dotenv = "0.15"

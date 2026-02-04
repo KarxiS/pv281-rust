@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="view-slave" class="h-full flex flex-col">
+     <!-- Navbar -->
+     <div class="bg-gray-800 p-4 flex justify-between items-center shadow-md border-b border-gray-700 z-10">
+        <h2 class="text-xl font-bold text-green-500">Slave Mode</h2>
+        <a href="/" class="btn-back text-sm text-gray-400 hover:text-white flex items-center no-underline cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back
+        </a>
+    </div>
+
+    <!-- Content -->
+    <div class="flex-1 flex flex-col items-center justify-center p-4 text-center">
+        <div class="relative mb-8">
+            <div class="absolute inset-0 bg-green-500 blur-xl opacity-20 rounded-full animate-pulse"></div>
+            <div class="relative h-32 w-32 bg-gray-800 border-2 border-green-500/50 rounded-full flex items-center justify-center mx-auto shadow-2xl">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.636 18.364a9 9 0 010-12.728m12.728 0a9 9 0 010 12.728m-9.9-2.829a5 5 0 010-7.07m7.072 0a5 5 0 010 7.07M13 12a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+            </div>
+        </div>
+        
+        <h3 class="text-3xl font-bold mb-2 text-white">Connect to Master</h3>
+        <p class="text-gray-400 mb-8 text-lg">Enter the IP address of the Master PC</p>
+
+        <div class="bg-gray-800 rounded-lg p-6 max-w-md w-full border border-gray-700 shadow-lg space-y-4">
+            <form hx-post="/api/start_slave" hx-target="#connection-status-area" hx-swap="innerHTML">
+                <div class="text-left">
+                    <label class="block text-gray-400 text-sm font-bold mb-2" for="master-ip">
+                        Master IP Address
+                    </label>
+                    <input class="shadow appearance-none border border-gray-600 rounded w-full py-3 px-4 text-white bg-gray-900 leading-tight focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-colors" 
+                           name="master_ip" type="text" placeholder="e.g. 192.168.1.55" value="127.0.0.1">
+                </div>
+                
+                <div class="flex space-x-2 mt-4">
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-500 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition-colors shadow-lg shadow-green-900/50 flex justify-center items-center">
+                        Connect
+                    </button>
+                    <button hx-post="/api/stop_slave" hx-target="#connection-status-area" hx-swap="innerHTML"
+                            type="button"
+                            class="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline transition-colors shadow-lg shadow-gray-900/50 flex justify-center items-center">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+            
+            <div id="connection-status-area"
+                 class="text-sm text-gray-500 mt-2 h-5"
+                 hx-get="/api/slave_status"
+                 hx-trigger="load, every 1s"
+                 hx-swap="innerHTML"></div>
+        </div>
+        
+        <div class="w-full max-w-md mt-4">
+            <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-2">
+                <span class="text-xs text-gray-500 uppercase tracking-wide">Connection Log</span>
+                <span class="h-2 w-2 rounded-full bg-green-500 animate-ping"></span>
+            </div>
+            <div id="connection-log" class="font-mono text-sm text-left h-32 overflow-y-auto text-green-400/80 space-y-1">
+                <!-- Logs will be dynamically added here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

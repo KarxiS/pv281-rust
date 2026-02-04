@@ -1,0 +1,49 @@
+@startuml rust_database_assignment_erd
+
+hide circle
+skinparam Linetype polyline
+skinparam Nodesep 75
+skinparam Ranksep 75
+
+entity User {
+    * id: <<uuid>>
+    ---
+    * username: text
+    * email: text
+    * name: text
+    * surname: text
+    * bio: text
+    * profile_picture: <<url>>
+    * password_hash: text
+    * password_salt: text
+    * created_at: <<date>>
+    * edited_at: <<date>>
+    deleted_at: <<date>>
+}
+
+entity Post {
+    * id: <<uuid>>
+    ---
+    * creator_id: <<FK: User>>
+    * created_at: <<date>>
+    * edited_at: <<date>>
+    deleted_at: <<date>>
+    * content: text
+}
+
+entity Comment {
+    * id: <<uuid>>
+    ---
+    * creator_id: <<FK: User>>
+    * post_id: <<FK: Post>>
+    * created_at: <<date>>
+    * edited_at: <<date>>
+    deleted_at: <<date>>
+    * content: text
+}
+
+User ||.left.o{ Post
+User ||..o{ Comment
+Post ||.down.o{ Comment
+
+@enduml

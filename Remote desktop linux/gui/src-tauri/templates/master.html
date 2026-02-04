@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div id="view-master" class="h-full flex flex-col">
+    <!-- Navbar -->
+    <div class="bg-gray-800 p-4 flex justify-between items-center shadow-md border-b border-gray-700 z-10">
+        <div class="flex items-center space-x-3">
+            <h2 class="text-xl font-bold text-blue-500">Master Mode</h2>
+            <span class="text-gray-600">|</span>
+            <button class="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1 rounded text-gray-300 transition-colors">
+                ↻ Scan Network
+            </button>
+        </div>
+        <a href="/" class="btn-back text-sm text-gray-400 hover:text-white flex items-center no-underline cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back
+        </a>
+    </div>
+    
+    <!-- Configuration Form -->
+    <div class="bg-gray-800 p-6 border-b border-gray-700">
+        <h3 class="text-gray-400 text-sm uppercase tracking-wide mb-4 font-semibold">Input Configuration</h3>
+        <form hx-post="/api/toggle_master" hx-target="#master-controls" hx-swap="innerHTML">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-400 text-xs font-bold mb-2" for="master-mouse-path">
+                        Mouse Device Path
+                    </label>
+                    <input class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 text-white bg-gray-900 leading-tight focus:outline-none focus:border-blue-500 text-sm" 
+                           name="mouse" type="text" placeholder="e.g. /dev/input/event0" value="/dev/input/event4">
+                </div>
+                <div>
+                    <label class="block text-gray-400 text-xs font-bold mb-2" for="master-keyboard-path">
+                        Keyboard Device Path
+                    </label>
+                    <input class="shadow appearance-none border border-gray-600 rounded w-full py-2 px-3 text-white bg-gray-900 leading-tight focus:outline-none focus:border-blue-500 text-sm" 
+                           name="keyboard" type="text" placeholder="e.g. /dev/input/event1" value="/dev/input/event1">
+                </div>
+            </div>
+            <div id="master-controls" class="mt-4 flex justify-end space-x-2">
+                {% if is_running %}
+                <button type="submit" name="action" value="stop" class="bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-lg shadow-red-900/50">
+                    Stop Master Process
+                </button>
+                {% else %}
+                <button type="submit" name="action" value="start" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-lg shadow-blue-900/50">
+                    Start Master Process
+                </button>
+                {% endif %}
+            </div>
+        </form>
+        <div class="mt-6">
+            <h4 class="text-gray-400 text-xs uppercase tracking-wide mb-2 font-semibold">Send File to Slaves</h4>
+            <form hx-post="/api/send_file" hx-target="#file-send-status" hx-swap="innerHTML" hx-encoding="multipart/form-data" class="flex items-center space-x-2">
+                <input type="file" name="file"
+                       class="flex-1 text-sm text-gray-300 file:mr-3 file:py-2 file:px-3 file:rounded file:border-0 file:bg-gray-700 file:text-gray-200 hover:file:bg-gray-600" />
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded text-sm transition-colors shadow-lg shadow-blue-900/50">
+                    Send
+                </button>
+            </form>
+            <div id="file-send-status" class="mt-2 text-sm text-gray-400"></div>
+        </div>
+    </div>
+
+    <!-- Status / Calibration Panel -->
+    <div class="bg-gray-800 p-4 border-b border-gray-700">
+        <div id="master-status"
+             class="rounded bg-gray-900/60 border border-gray-700 px-4 py-3"
+             hx-get="/api/status"
+             hx-trigger="load, every 1s"
+             hx-swap="innerHTML">
+            <span class="text-gray-500 text-sm">Loading status...</span>
+        </div>
+    </div>
+
+    <!-- Client List Content -->
+    <div class="flex-1 p-6 overflow-hidden flex flex-col max-w-4xl mx-auto w-full">
+        <h3 class="text-gray-400 text-sm uppercase tracking-wide mb-4 font-semibold">Discovered Devices</h3>
+        
+        <!-- List Container -->
+        <div id="client-list" class="flex-1 overflow-y-auto space-y-3 pb-4"
+             hx-get="/api/clients" hx-trigger="every 2s" hx-swap="innerHTML">
+            {% for client in clients %}
+            <div class="bg-gray-800 border border-gray-700 hover:border-gray-600 hover:bg-gray-750 rounded-lg p-4 flex items-center justify-between transition-all duration-200">
+                <div class="flex items-center space-x-4">
+                    <div class="h-10 w-10 rounded bg-gray-700 flex items-center justify-center text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white">{{ client.name }}</div>
+                        <div class="flex items-center space-x-2 text-xs text-gray-400">
+                            <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                            <span>{{ client.ip }}</span>
+                            <span class="capitalize text-gray-500">(connected)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button hx-post="/api/disconnect/{{ client.id }}" hx-target="#client-list" hx-swap="innerHTML"
+                        class="btn-disconnect bg-red-600 hover:bg-red-500 shadow-red-900/50 text-white px-4 py-2 rounded font-medium text-sm transition-colors shadow-lg flex items-center">
+                    Disconnect
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

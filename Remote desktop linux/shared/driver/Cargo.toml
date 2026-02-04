@@ -1,0 +1,17 @@
+[package]
+name = "kmf-driver"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { workspace = true }
+thiserror = "1.0"
+nix = { version = "0.30.1", features = ["fs"] }
+tokio = { workspace = true }
+futures = "0.3.31"
+async-scoped = "0.9.0"
+futures-core = "0.3.31"
+serde = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+evdev = { workspace = true, features = ["stream-trait"] }

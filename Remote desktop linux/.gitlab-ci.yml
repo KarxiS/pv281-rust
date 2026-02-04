@@ -1,0 +1,84 @@
+workflow:
+  rules:
+    - when: always
+
+default:
+  interruptible: true
+  image: rust:latest
+  
+  before_script:
+    - apt-get update
+    - apt-get install -y libwebkit2gtk-4.1-dev build-essential curl wget file libssl-dev libgtk-3-dev libayatana-appindicator3-dev librsvg2-dev
+    - mkdir -p .git/hooks
+    - rustc --version
+    - cargo --version
+  
+  tags:
+    - shared-fi
+
+stages:
+  - validate
+  - build
+  - preflight
+  - tests
+
+# Stage 0: Validate commit message
+validate:
+  stage: validate
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache bash git
+  script:
+    - |
+      if ! echo "$CI_COMMIT_MESSAGE" | grep -Eq "^(feat|fix|chore|refactor|docs|test|ci|style|perf|build)(\(.+\))?: [A-Z].+"; then
+        echo "❌ Invalid commit message format!"
+        echo ""
+        echo "Commit message: $CI_COMMIT_MESSAGE"
+        echo ""
+        echo "Expected format: <type>(scope): <Message starting with capital letter>"
+        echo ""
+        echo "Valid types: feat, fix, chore, refactor, docs, test, ci, style, perf, build"
+        echo ""
+        echo "Examples:"
+        echo "  ✅ feat: Add network protocol"
+        echo "  ✅ feat(driver): Add mouse input handling"
+        echo "  ✅ fix(network): Handle connection timeout"
+        echo "  ❌ added stuffh"
+        echo "  ❌ fix: lowercase message"
+        exit 1
+      fi
+      echo "✅ Commit message format is valid"
+  allow_failure: false
+
+# Stage 1: Build
+build:
+  stage: build
+  script:
+    - cargo build --verbose
+  allow_failure: false
+
+# Stage 2a: Clippy
+clippy:
+  stage: preflight
+  script:
+    - rustup component add clippy
+    - cargo clippy --all-targets --workspace -- -D warnings
+  allow_failure: false
+
+# Stage 2b: Format check
+format:
+  stage: preflight
+  image: rust:alpine
+  before_script:
+    - apk add --no-cache musl-dev git
+    - rustup component add rustfmt
+  script:
+    - cargo fmt --all -- --check
+  allow_failure: false
+
+# Stage 3: Tests
+tests:
+  stage: tests
+  script:
+    - cargo test --verbose --workspace
+  allow_failure: false

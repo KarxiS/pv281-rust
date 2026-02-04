@@ -1,0 +1,19 @@
+[package]
+name = "social-network-databases"
+version = "0.1.0"
+edition = "2024"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = { version = "0.1.89" }
+chrono = { version = "0.4.31" }
+sqlx = { version = "0.8.6", features = [
+    "runtime-tokio",
+    "tls-native-tls",
+    "postgres",
+    "uuid",
+    "chrono",
+] }
+tokio = { version = "1.48.0", features = ["full"] }
+uuid = { version = "1.18.1" }

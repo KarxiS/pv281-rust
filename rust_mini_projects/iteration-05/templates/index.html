@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Rust Todo App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.8" 
+          integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" 
+          crossorigin="anonymous"></script>
+</head>
+
+<body class="bg-gray-900 text-gray-100 antialiased min-h-screen flex flex-col items-center pt-10 sm:pt-20 pb-10">
+
+  <main class="w-full max-w-2xl px-4">
+    
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">Tasks</h1>
+      <p class="text-gray-400">BEST TODO APP!!</p>
+    </div>
+
+    <!-- Input Form -->
+    <div class="bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-700 mb-8">
+      <form hx-post="/add" hx-target="#todo-list" hx-swap="outerHTML" hx-on::after-request="this.reset()" class="flex gap-3">
+        <input 
+          class="flex-grow bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-3 outline-none transition shadow-inner placeholder-gray-400" 
+          type="text" 
+          name="todo_name" 
+          id="todo_name" 
+          placeholder="What needs to be done?" 
+          required 
+          autocomplete="off"
+        />
+        <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-800 font-medium rounded-lg text-sm px-6 py-3 transition shadow-md flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+          Add
+        </button>
+      </form>
+    </div>
+
+    <!-- Todo List Container -->
+    <div id="content">
+      {% include "todo_list.html" %}
+    </div>
+
+  </main>
+
+  <!-- THE VIBING CAT (Black Version) -->
+  <div class="vibe-cat-container">
+    <div class="relative w-32 h-32">
+       <!-- Music Notes -->
+       <svg class="music-note note-1 w-6 h-6 text-purple-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+       <svg class="music-note note-2 w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+       <svg class="music-note note-3 w-4 h-4 text-pink-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+
+       <!-- Cat SVG -->
+       <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-2xl">
+         <!-- Body -->
+         <g class="cat-body">
+            <ellipse cx="100" cy="160" rx="60" ry="40" fill="#222" />
+            <path d="M60 160 Q100 200 140 160" stroke="#444" stroke-width="3" fill="none" opacity="0.3"/>
+         </g>
+         
+         <!-- Head -->
+         <g class="cat-head">
+            <circle cx="100" cy="100" r="50" fill="#222" />
+            <!-- Ears -->
+            <path d="M65 70 L50 30 L90 60 Z" fill="#222" />
+            <path d="M135 70 L150 30 L110 60 Z" fill="#222" />
+            <path d="M65 70 L58 45 L80 65 Z" fill="#ff9999"/> <!-- Inner Ear L -->
+            <path d="M135 70 L142 45 L120 65 Z" fill="#ff9999"/> <!-- Inner Ear R -->
+            
+            <!-- Face -->
+            <circle cx="85" cy="95" r="4" fill="#fff"/> <!-- Eye L -->
+            <circle cx="115" cy="95" r="4" fill="#fff"/> <!-- Eye R -->
+            <path d="M95 105 Q100 110 105 105" stroke="#fff" stroke-width="2" fill="none" opacity="0.8"/> <!-- Mouth -->
+            <ellipse cx="80" cy="112" rx="5" ry="3" fill="#ff5555" opacity="0.4"/> <!-- Blush L -->
+            <ellipse cx="120" cy="112" rx="5" ry="3" fill="#ff5555" opacity="0.4"/> <!-- Blush R -->
+            
+            <!-- Sunglasses (White frames for contrast) -->
+            <g transform="translate(0, -5)">
+               <rect x="70" y="85" width="25" height="15" rx="2" fill="#000"/>
+               <rect x="105" y="85" width="25" height="15" rx="2" fill="#000"/>
+               <line x1="95" y1="92" x2="105" y2="92" stroke="#fff" stroke-width="2"/>
+            </g>
+         </g>
+       </svg>
+    </div>
+  </div>
+
+  <footer class="mt-auto text-center text-gray-400 text-sm py-6">
+    <p>HAPPY NEW YEAR 2026!:)</p>
+  </footer>
+
+</body>
+</html>

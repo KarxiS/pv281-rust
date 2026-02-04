@@ -1,0 +1,128 @@
+body {
+  background-color: #111827; /* gray-900 */
+  color: #f3f4f6; /* gray-100 */
+}
+
+p {
+  font-size: 1.2rem;
+}
+
+/* Rainbow Background Animation */
+@keyframes rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.rainbow-bg {
+  background: linear-gradient(270deg, #450a0a, #422006, #3f3f0e, #064e3b, #1e3a8a, #4c1d95, #701a75);
+  background-size: 400% 400%;
+  animation: rainbow 10s ease infinite;
+}
+
+/* 1. The Text Bounce */
+@keyframes funny-bounce {
+  0% { transform: translateY(0) scale(1.1, 0.9); }
+  10% { transform: translateY(0) scale(1, 1); }
+  50% { transform: translateY(-10px) scale(1, 1); }
+  90% { transform: translateY(0) scale(1, 1); }
+  100% { transform: translateY(0) scale(1.1, 0.9); }
+}
+
+/* 2. The Bang Effect */
+@keyframes bang-long-fade {
+  0% { opacity: 0; transform: scale(0.5) translateX(0); }
+  5% { opacity: 1; transform: scale(1.2) translateX(5px); }
+  40% { opacity: 1; transform: scale(1) translateX(10px); }
+  70% { opacity: 0; transform: scale(0.8) translateX(15px); }
+  100% { opacity: 0; }
+}
+
+/* Wrapper for YAAAY text */
+.yaay-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 1.5rem;
+}
+
+/* The Bouncing Text */
+.yaay-bouncer {
+  display: inline-block;
+  animation: funny-bounce 1.2s infinite ease-in-out;
+}
+
+/* The Bang Element */
+.yaay-wrapper::after {
+  content: 'bang!';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 10px;
+  font-size: 0.7rem;
+  font-weight: 900;
+  color: #ffeb3b;
+  text-transform: uppercase;
+  font-style: italic;
+  white-space: nowrap;
+  animation: bang-long-fade 1.2s infinite linear; 
+  pointer-events: none;
+}
+
+/* --- VIBING CAT LOGIC --- */
+.vibe-cat-container {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 50;
+}
+
+/* CSS Logic: Show cat if there are tasks AND no incomplete tasks */
+body:has(.todo-item):not(:has(.incomplete-task)) .vibe-cat-container {
+  display: block;
+  animation: slide-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Cat Animations (130 BPM) */
+@keyframes vibe-head {
+  0%, 100% { transform: rotate(-5deg) translateY(0); }
+  50% { transform: rotate(5deg) translateY(2px); }
+}
+
+@keyframes vibe-body {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.95); }
+}
+
+@keyframes note-float {
+  0% { transform: translateY(0) rotate(0) scale(1); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(-40px) rotate(20deg) scale(1.2); opacity: 0; }
+}
+
+.cat-head {
+  transform-origin: center bottom;
+  animation: vibe-head 0.46s infinite ease-in-out alternate;
+}
+
+.cat-body {
+  transform-origin: center bottom;
+  animation: vibe-body 0.46s infinite ease-in-out alternate;
+}
+
+.music-note {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  animation: note-float 1.5s infinite linear;
+}
+.note-1 { animation-delay: 0s; right: 10px; }
+.note-2 { animation-delay: 0.5s; right: -10px; }
+.note-3 { animation-delay: 1s; right: 0px; }

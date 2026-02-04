@@ -1,0 +1,16 @@
+#!/bin/sh
+
+echo "🔍 Running cargo fmt check..."
+cargo fmt --check || {
+  echo "❌ Code formatting issues found!"
+  echo "Run: cargo fmt"
+  exit 1
+}
+
+echo "🔍 Running cargo clippy..."
+cargo clippy -- -D warnings || {
+  echo "❌ Clippy found issues!"
+  exit 1
+}
+
+echo "✅ Pre-commit checks passed!"

@@ -1,0 +1,70 @@
+<div class="space-y-3" id="todo-list">
+    <!-- List of Todos -->
+    {% for todo in todos %}
+    <div class="todo-item flex items-center justify-between p-4 shadow-sm rounded-lg border transition hover:shadow-md group 
+        {% if todo.is_done %} rainbow-bg border-transparent {% else %} incomplete-task bg-gray-800 border-gray-700 {% endif %}">
+        
+        <!-- Left Side: Toggle (Checkbox + Text) -->
+        <div hx-post="/toggle/{{todo.id}}" 
+             hx-target="#todo-list" 
+             hx-swap="outerHTML" 
+             class="flex items-center cursor-pointer flex-grow select-none">
+            
+            <!-- Custom Checkbox -->
+            <div class="w-6 h-6 border-2 rounded flex items-center justify-center mr-3 transition-colors
+                {% if todo.is_done %} bg-white border-white {% else %} border-gray-500 group-hover:border-blue-400 {% endif %}">
+                {% if todo.is_done %}
+                <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M5 13l4 4L19 7"></path></svg>
+                {% endif %}
+            </div>
+
+            <!-- Text -->
+            <div class="flex flex-col sm:flex-row sm:items-center">
+                <span class="text-lg font-medium {% if todo.is_done %} text-white drop-shadow-sm {% else %} text-gray-200 {% endif %}">
+                    {{todo.text}}
+                </span>
+                {% if todo.is_done %}
+                <div class="yaay-wrapper sm:ml-6 mt-1 sm:mt-0">
+                    <span class="yaay-bouncer text-xs font-black text-white bg-black/20 px-2 py-1 rounded-full uppercase tracking-widest">
+                        YAAAY, YOU DID IT!
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right Side: Actions -->
+        <div class="flex items-center space-x-2 ml-4">
+            <!-- Edit Button -->
+            <button hx-post="/edit/{{todo.id}}" 
+                    hx-prompt="Update task text:" 
+                    hx-target="#todo-list" 
+                    hx-swap="outerHTML"
+                    class="{% if todo.is_done %} text-white hover:bg-white/20 {% else %} text-gray-400 hover:text-blue-400 hover:bg-gray-700 {% endif %} p-2 rounded transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            </button>
+
+            <!-- Delete Button -->
+            <button hx-post="/delete/{{todo.id}}" 
+                    hx-target="#todo-list" 
+                    hx-swap="outerHTML"
+                    class="{% if todo.is_done %} text-white hover:bg-white/20 {% else %} text-gray-400 hover:text-red-400 hover:bg-gray-700 {% endif %} p-2 rounded transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- Bottom Actions -->
+    <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700 mt-6">
+        <button hx-post="/delete_all" hx-target="#todo-list" hx-swap="outerHTML"
+            class="px-4 py-2 text-sm font-medium text-red-400 bg-gray-800 border border-red-900/30 rounded-md hover:bg-red-900/20 transition">
+            Clear Completed
+        </button>
+
+        <button hx-post="/delete_everything" hx-target="#todo-list" hx-swap="outerHTML"
+            class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700 shadow-sm transition">
+            Delete Everything
+        </button>
+    </div>
+</div>

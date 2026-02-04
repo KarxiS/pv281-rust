@@ -1,0 +1,21 @@
+[[bin]]
+name = "kmf-slave"
+path = "src/main.rs"
+
+[package]
+name = "kmf-slave"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+kmf-middleware = { path = "../shared/middleware" }
+kmf-protocol = { path = "../shared/protocol" }
+kmf-driver = { path = "../shared/driver" }
+clap = { workspace = true }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+hostname = { workspace = true }
+serde_json = { workspace = true }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+evdev = { workspace = true }

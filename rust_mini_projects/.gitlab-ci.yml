@@ -1,0 +1,7 @@
+# Do NOT modify this file!
+# This file provides detached pipelines to run for your merge requests.
+
+include:
+  - project: 'pv281/pv281-iterations-2022-pipelines'
+    ref: "2025"
+    file: "iterations-2025.yml"
